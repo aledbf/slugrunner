@@ -25,6 +25,8 @@ docker-build:
 	# These are both YAML specific
 	# perl -pi -e "s|image: [a-z0-9.:]+\/deis\/${SHORT_NAME}:[0-9a-z-.]+|image: ${IMAGE}|g" ${RC}
 	# perl -pi -e "s|release: [a-zA-Z0-9.+_-]+|release: ${VERSION}|g" ${RC}
+	docker export `docker run -d --entrypoint /bin/bash ${IMAGE}` | docker import - flat-image-name
+	docker tag -f flat-image-name ${IMAGE}
 
 docker-push:
 	docker push ${IMAGE}
@@ -49,15 +51,7 @@ kube-service: kube-secrets
 kube-clean:
 	- kubectl delete rc deis-${SHORT_NAME}-rc
 
-kube-mc:
-	kubectl create -f manifests/deis-mc-pod.yaml
-
-mc:
-	docker build -t ${DEIS_REGISTRY}/deis/minio-mc:latest mc
-	docker push ${DEIS_REGISTRY}/deis/minio-mc:latest
-	perl -pi -e "s|image: [a-z0-9.:]+\/|image: ${DEIS_REGISTRY}/|g" manifests/deis-mc-pod.yaml
-
 test:
 	@echo "Implement functional tests in _tests directory"
 
-.PHONY: all bootstrap build docker-compile kube-up kube-down deploy mc kube-mc test
+.PHONY: all bootstrap build docker-compile kube-up kube-down deploy test

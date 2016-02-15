@@ -1,4 +1,4 @@
-FROM heroku/cedar:14
+FROM ubuntu-debootstrap:15.10
 
 RUN mkdir /app
 RUN addgroup --quiet --gid 2000 slug && \
@@ -12,15 +12,17 @@ ENV PORT 5000
 EXPOSE 5000
 
 ADD ./runner /runner
-ADD ./bin /bin
 RUN chown slug:slug /runner/init
-RUN chown slug:slug /bin/mc
+
+ADD ./stack/ /stack
+RUN /stack/cedar.sh
+
 USER slug
 ENV HOME /app
 ENTRYPOINT ["/runner/init"]
 
-ENV DEIS_RELEASE 1.11.0-dev
-
 ONBUILD RUN mkdir -p /app
 ONBUILD WORKDIR /app
 ONBUILD ADD slug.tgz /app
+
+ENV DEIS_RELEASE 2.0.0-dev
