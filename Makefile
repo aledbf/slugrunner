@@ -21,12 +21,13 @@ bootstrap:
 	@echo Nothing to do.
 
 docker-build:
-	docker build --rm -t ${IMAGE} rootfs
+	docker build --rm -t temporal-slugrunner rootfs
 	# These are both YAML specific
 	# perl -pi -e "s|image: [a-z0-9.:]+\/deis\/${SHORT_NAME}:[0-9a-z-.]+|image: ${IMAGE}|g" ${RC}
 	# perl -pi -e "s|release: [a-zA-Z0-9.+_-]+|release: ${VERSION}|g" ${RC}
-	docker export `docker run -d --entrypoint /bin/bash ${IMAGE}` | docker import - flat-image-name
-	docker tag -f flat-image-name ${IMAGE}
+	docker export `docker run -d --entrypoint /bin/bash temporal-slugrunner` | docker import - flat-image-name
+	docker build -t ${IMAGE} .
+
 
 docker-push:
 	docker push ${IMAGE}
