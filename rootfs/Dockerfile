@@ -1,4 +1,4 @@
-FROM ubuntu-debootstrap:15.10
+FROM gcr.io/google_containers/ubuntu-slim:0.1
 
 RUN mkdir /app
 RUN addgroup --quiet --gid 2000 slug && \

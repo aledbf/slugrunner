@@ -1,3 +1,4 @@
+bash
 curl
 fontconfig
 fonts-arphic-bkai00mp

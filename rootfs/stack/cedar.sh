@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
@@ -44,7 +44,7 @@ update-locale LANG=en_US.UTF-8
 ln -s /stack/libxl.so /usr/lib
 
 # Install packages
-xargs apt-get install -y --force-yes < /stack/packages.txt
+xargs apt-get install -y --force-yes --no-install-recommends < /stack/packages.txt
 
 # Install mongodb cli tools
 apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
@@ -97,7 +97,7 @@ rm -rf /usr/lib/jvm/java-8-oracle/lib/missioncontrol
 rm -rf /usr/lib/jvm/java-8-oracle/lib/visualvm
 
 # remove SUID and SGID flags from all binaries
-function pruned_find() {
+pruned_find() {
   find / -type d \( -name dev -o -name proc \) -prune -o $@ -print
 }
 

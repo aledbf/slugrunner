@@ -1,4 +1,4 @@
-FROM dev-registry.soficom.cl/deis/slugrunner:v1.0.1
+FROM flat-image-name
 
 # add default port to expose (can be overridden)
 ENV PORT 5000
